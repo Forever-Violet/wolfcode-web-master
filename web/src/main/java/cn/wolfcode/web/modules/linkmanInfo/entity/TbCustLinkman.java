@@ -53,7 +53,7 @@ public class TbCustLinkman implements Serializable {
      * 性别 1 男 0 女
      */
     @NotNull(message = "性别不能为空!", groups = {AddGroup.class, UpdateGroup.class})
-    @Excel(name = "性别(1男 0女)")
+    @Excel(name = "性别", replace = {"男_1", "女_0"})  // 值替换
     private Integer sex;
 
     /**
