@@ -26,12 +26,12 @@
                     </div>
                 </div>-->
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">客户id</label>
+                        <label class="layui-form-label">所属企业</label>
                     <div class="layui-input-block">
                         <select id="custId" lay-filter="custId" name="custId">
                             <option value="">请选择</option>
                             <#list custs as cust>
-                                <option value="${cust.id}">${cust.customerName}[${cust.legalLeader}](${cust.id})</option>
+                                <option value="${cust.id}">${cust.customerName}</option>
                             </#list>
                         </select>
                     </div>

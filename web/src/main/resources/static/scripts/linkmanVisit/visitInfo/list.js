@@ -126,7 +126,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                 title: '新增',
                 fixed: false,
                 maxmin: true,
-                content: web.rootPath() + 'custinfo/add.html'
+                content: web.rootPath() + 'visitInfo/add.html'
             });
         }
 
