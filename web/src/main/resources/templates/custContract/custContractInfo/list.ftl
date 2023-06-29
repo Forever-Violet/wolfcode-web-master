@@ -104,7 +104,7 @@
                         }}
                         <@sec.authenticate grants="custContract:custContractInfo:audit">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="audit"><i
-                                        class="layui-icon">&#xe642;</i>审核</a>
+                                        class="layui-icon">&#xe6b2;</i>审核</a>
                         </@sec.authenticate>
                         <@sec.authenticate grants="custContract:custContractInfo:delete">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
@@ -112,7 +112,7 @@
                         </@sec.authenticate>
                         <@sec.authenticate grants="custContract:custContractInfo:nullify">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="nullify"><i
-                                        class="layui-icon">&#xe640;</i>作废</a>
+                                        class="layui-icon">&#x1007;</i>作废</a>
                         </@sec.authenticate>
                         {{#  } else if(d.auditStatus == '-1'){ }}  <#-- 审核不通过可以修改 未作废 -->
                         <@sec.authenticate grants="custContract:custContractInfo:update">
@@ -125,12 +125,17 @@
                         </@sec.authenticate>
                         <@sec.authenticate grants="custContract:custContractInfo:nullify">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="nullify"><i
-                                        class="layui-icon">&#xe640;</i>作废</a>
+                                        class="layui-icon">&#x1007;</i>作废</a>
                         </@sec.authenticate>
-                        {{#  } else if(d.auditStatus == '1'){ }} <#--审核通过 盖章确认  未作废-->
+                        {{#  } else if(d.affixSealStatus == '1'){ }} <#-- 盖章确认-->
+                        <@sec.authenticate grants="custContract:custContractInfo:delete">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
+                                        class="layui-icon">&#xe640;</i>删除</a>
+                        </@sec.authenticate>
+                        {{# } else if(d.auditStatus == '1'){ }} <#--未盖章确认-->
                         <@sec.authenticate grants="custContract:custContractInfo:affixSeal">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="affixSeal"><i
-                                        class="layui-icon">&#xe640;</i>盖章</a>
+                                        class="layui-icon">&#xe672;</i>盖章</a>
                         </@sec.authenticate>
                         <@sec.authenticate grants="custContract:custContractInfo:delete">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
@@ -138,9 +143,9 @@
                         </@sec.authenticate>
                         <@sec.authenticate grants="custContract:custContractInfo:nullify">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="nullify"><i
-                                        class="layui-icon">&#xe640;</i>作废</a>
+                                        class="layui-icon">&#x1007;</i>作废</a>
                         </@sec.authenticate>
-                        {{# }  }}
+                        {{# } }}
 
 
                     </script>

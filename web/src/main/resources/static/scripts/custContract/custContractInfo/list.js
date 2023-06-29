@@ -24,9 +24,9 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                     {field: 'custName', title: '企业名称', minWidth: 100, align: "center"},
                     {field: 'contractName', title: '合同名称', minWidth: 100, align: "center"},
                     {field: 'contractCode', title: '合同编码', minWidth: 100, align: "center"},
-                    {field: 'amounts', title: '合同金额(元)', minWidth: 100, align: "center"},
-                    {field: 'startDate', title: '合同开始时间', minWidth: 100, align: "center"},
-                    {field: 'endDate', title: '合同终止时间', minWidth: 100, align: "center"},
+                    {field: 'amounts', title: '合同金额(元)', minWidth: 110, align: "center"},
+                    {field: 'startDate', title: '合同开始时间', minWidth: 125, align: "center"},
+                    {field: 'endDate', title: '合同终止时间', minWidth: 125, align: "center"},
                     {field: 'content', title: '合同内容', minWidth: 100, align: "center"},
                     {
                         field: 'affixSealStatus', title: '是否盖章确认', minWidth: 100, align: "center"
@@ -180,39 +180,97 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                 });
                 break;
             case 'audit':
-                layer.open({
-                    id: "Audit-frame",
-                    type: 2,
-                    resize: false,
-                    area: ['550px', '500px'],
-                    title: '审核',
-                    fixed: false,
-                    maxmin: true,
-                    content: web.rootPath() + "custContractInfo/audit.html"
+                var index = layer.confirm('审核是否通过?', {
+                    btn: ['是', '否'] //按钮
+                }, function () {
+                    $.ajax({
+                        url: web.rootPath() + "custContractInfo/audit/" + data.id,
+                        type: "get",
+                        contentType: "application/json;charset=utf-8",
+                        data: { userChoice: true }, // 用户选择是
+                        dataType: 'json',
+                        success: function (data) {
+                            layer.msg("操作成功", {
+                                icon: 1,
+                                success: function () {
+                                    $('#SearchBtn').trigger("click");
+                                }
+                            });
+                        },
+                        error: function (e) {
+                            layer.msg(e.responseJSON.message, {icon: 2});
+                        }
+                    })
+                }, function () {
+                    // 点击“否”按钮
+                    $.ajax({
+                        url: web.rootPath() + "custContractInfo/audit/" + data.id,
+                        type: "get",
+                        data: { userChoice: false }, // 用户选择否
+                        success: function (response) {
+                            layer.msg("操作成功", {
+                                icon: 1,
+                                success: function () {
+                                    $('#SearchBtn').trigger("click");
+                                }
+                            });
+                        },
+                        error: function (e) {
+                            layer.msg(e.responseJSON.message, {icon: 2});
+                        }
+                    });
                 });
                 break;
             case 'affixSeal':
-                layer.open({
-                    id: "Update-frame",
-                    type: 2,
-                    resize: false,
-                    area: ['550px', '500px'],
-                    title: '盖章确认',
-                    fixed: false,
-                    maxmin: true,
-                    content: web.rootPath() + "custContractInfo/affixSeal.html"
+                var index = layer.confirm('是否盖章确认?', {
+                    btn: ['是', '否'] //按钮
+                }, function () {
+                    $.ajax({
+                        url: web.rootPath() + "custContractInfo/affixSeal/" + data.id,
+                        type: "get",
+                        contentType: "application/json;charset=utf-8",
+                        data: { userChoice: true }, // 用户选择是
+                        dataType: 'json',
+                        success: function (data) {
+                            layer.msg("操作成功", {
+                                icon: 1,
+                                success: function () {
+                                    $('#SearchBtn').trigger("click");
+                                }
+                            });
+                        },
+                        error: function (e) {
+                            layer.msg(e.responseJSON.message, {icon: 2});
+                        }
+                    })
+                }, function () {
+
                 });
                 break;
             case 'nullify':
-                layer.open({
-                    id: "Update-frame",
-                    type: 2,
-                    resize: false,
-                    area: ['550px', '500px'],
-                    title: '作废确认',
-                    fixed: false,
-                    maxmin: true,
-                    content: web.rootPath() + "custContractInfo/nullify.html"
+                var index = layer.confirm('是否作废合同?', {
+                    btn: ['是', '否'] //按钮
+                }, function () {
+                    $.ajax({
+                        url: web.rootPath() + "custContractInfo/nullify/" + data.id,
+                        type: "get",
+                        contentType: "application/json;charset=utf-8",
+                        data: { userChoice: true }, // 用户选择是
+                        dataType: 'json',
+                        success: function (data) {
+                            layer.msg("操作成功", {
+                                icon: 1,
+                                success: function () {
+                                    $('#SearchBtn').trigger("click");
+                                }
+                            });
+                        },
+                        error: function (e) {
+                            layer.msg(e.responseJSON.message, {icon: 2});
+                        }
+                    })
+                }, function () {
+
                 });
                 break;
         };

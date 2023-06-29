@@ -4,6 +4,7 @@ import cn.wolfcode.web.commons.entity.LayuiPage;
 import cn.wolfcode.web.commons.utils.LayuiTools;
 import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
+import cn.wolfcode.web.modules.custOrderInfo.entity.TbOrderInfo;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
 import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
 import cn.wolfcode.web.modules.log.LogModules;
@@ -158,8 +159,68 @@ public class TbContractController extends BaseController {
 
         // 设置该记录的修改时间
         entity.setUpdateTime(LocalDateTime.now());
+        // 重置审核状态
+        entity.setAuditStatus(0);
 
         entityService.updateById(entity);
+        return ResponseEntity.ok(ApiModel.ok());
+    }
+
+    /**
+     * 审核
+     * @param id 合同id
+     * @return
+     */            // logModules里面去自定义常量
+    @SysLog(value = LogModules.RECEIVE, module = LogModule)
+    @RequestMapping("audit/{id}")
+    @PreAuthorize("hasAuthority('custContract:custContractInfo:audit')")
+    public ResponseEntity<ApiModel> audit(@PathVariable("id") String id, @RequestParam("userChoice") Boolean userChoice) {
+        // 根据id获取订单
+        TbContract contract = entityService.getById(id);
+        if (userChoice){
+            // 审核通过
+            contract.setAuditStatus(1);
+        } else {
+            // 审核不通过
+            contract.setAuditStatus(-1);
+        }
+        // 更新
+        entityService.updateById(contract);
+        return ResponseEntity.ok(ApiModel.ok());
+    }
+
+    /**
+     * 盖章确认
+     * @param id 合同id
+     * @return
+     */            // logModules里面去自定义常量
+    @SysLog(value = LogModules.RECEIVE, module = LogModule)
+    @RequestMapping("affixSeal/{id}")
+    @PreAuthorize("hasAuthority('custContract:custContractInfo:affixSeal')")
+    public ResponseEntity<ApiModel> affixSeal(@PathVariable("id") String id) {
+        // 根据id获取订单
+        TbContract contract = entityService.getById(id);
+        // 确认盖章
+        contract.setAffixSealStatus(1);
+        // 更新
+        entityService.updateById(contract);
+        return ResponseEntity.ok(ApiModel.ok());
+    }
+
+    /**
+     * 是否作废
+     * @param id 合同id
+     * @return
+     */            // logModules里面去自定义常量
+    @SysLog(value = LogModules.RECEIVE, module = LogModule)
+    @RequestMapping("nullify/{id}")
+    @PreAuthorize("hasAuthority('custContract:custContractInfo:nullify')")
+    public ResponseEntity<ApiModel> nullify(@PathVariable("id") String id) {
+        // 根据id获取订单
+        TbContract contract = entityService.getById(id);
+        contract.setNullifyStatus(1);
+        // 更新
+        entityService.updateById(contract);
         return ResponseEntity.ok(ApiModel.ok());
     }
 
