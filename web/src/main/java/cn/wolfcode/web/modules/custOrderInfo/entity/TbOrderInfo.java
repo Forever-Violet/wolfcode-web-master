@@ -2,8 +2,15 @@ package cn.wolfcode.web.modules.custOrderInfo.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
+import link.ahsj.core.annotations.AddGroup;
+import link.ahsj.core.annotations.UpdateGroup;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
@@ -25,6 +32,7 @@ public class TbOrderInfo implements Serializable {
     /**
      * 所属客户id
      */
+    @NotBlank(message = "企业名称不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     private String custId;
 
     /**
@@ -37,18 +45,27 @@ public class TbOrderInfo implements Serializable {
     /**
      * 产品名称
      */
+
+    @NotBlank(message = "产品名称不能为空！", groups = {AddGroup.class, UpdateGroup.class})
+    @Length(max = 50, message = "产品名称不能超过50个字！", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "产品名称")
     private String prodName;
 
     /**
      * 产品数量
      */
+    @DecimalMin(value = "0.01", message = "产品数量必须为正数!", groups = {AddGroup.class, UpdateGroup.class})
+    @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "产品数量必须为整数!", groups = {AddGroup.class, UpdateGroup.class})
+    @NotNull(message = "产品数量不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "产品数量")
     private Integer amounts;
 
     /**
      * 产品价格
      */
+    @DecimalMin(value = "0.01", message = "产品单价必须为正数!", groups = {AddGroup.class, UpdateGroup.class})
+    @Digits(integer = Integer.MAX_VALUE, fraction = 2, message = "产品单价不能超过两位小数!", groups = {AddGroup.class, UpdateGroup.class})
+    @NotBlank(message = "产品单价不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "产品单价")
     private String price;
 
@@ -60,36 +77,49 @@ public class TbOrderInfo implements Serializable {
     /**
      * 收货人
      */
+    @Length(max = 30, message = "收货人不能超过30个字！", groups = {AddGroup.class, UpdateGroup.class})
+    @NotBlank(message = "收货人不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     private String receiver;
 
     /**
      * 收货人电话
      */
+    @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "收货人电话必须为纯数字!", groups = {AddGroup.class, UpdateGroup.class})
+    @NotBlank(message = "收货人电话不能为空！", groups = {AddGroup.class, UpdateGroup.class})
+    @Length(max = 20, message = "收货人电话不能超过20个字！", groups = {AddGroup.class, UpdateGroup.class})
     private String linkPhone;
 
     /**
      * 收货地址
      */
+    @NotBlank(message = "收货地址不能为空！", groups = {AddGroup.class, UpdateGroup.class})
+    @Length(max = 50, message = "收货地址不能超过50个字！", groups = {AddGroup.class, UpdateGroup.class})
     private String address;
 
     /**
      * 物流
      */
+    @NotBlank(message = "物流不能为空！", groups = {AddGroup.class, UpdateGroup.class})
+    @Length(max = 20, message = "物流不能超过20个字！", groups = {AddGroup.class, UpdateGroup.class})
     private String logistcs;
 
     /**
      * 物流单号
      */
+    @NotBlank(message = "物流单号不能为空！", groups = {AddGroup.class, UpdateGroup.class})
+    @Length(max = 50, message = "物流单号不能超过50个字！", groups = {AddGroup.class, UpdateGroup.class})
     private String logisticsCode;
 
     /**
      * 发货时间
      */
+  //  @NotNull(message = "物流单号不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     private LocalDateTime deliverTime;
 
     /**
      * 收货时间
      */
+  //  @NotNull(message = "物流单号不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     private LocalDateTime receiveTime;
 
     /**

@@ -55,7 +55,7 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">产品数量</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="amounts"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text"  name="amounts" lay-verify="number" placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">

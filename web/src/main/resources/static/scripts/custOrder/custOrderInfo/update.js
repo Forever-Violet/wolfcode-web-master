@@ -19,8 +19,12 @@ layui.use(['form', 'layer'], function () {
                     }
                 });
             },
-            error: function (e) {
-                layer.msg(e.responseJSON.message, {icon: 2});
+            error: function (e) {//注意是errCode  别搞错了
+                if (e.responseJSON.errCode === 1003) {//接收错误信息, 数据效验错误
+                    layer.msg(e.responseJSON.data.toString(), {icon: 2});
+                } else{
+                    layer.msg(e.responseJSON.message, {icon: 2});
+                }
             }
 
         })
