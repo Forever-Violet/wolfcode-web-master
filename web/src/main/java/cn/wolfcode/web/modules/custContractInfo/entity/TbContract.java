@@ -83,19 +83,19 @@ public class TbContract implements Serializable {
     /**
      * 是否盖章确认 0 否 1 是
      */
-    @NotNull(message = "请选择是否盖章!",groups = {AddGroup.class, UpdateGroup.class})
+    //@NotNull(message = "请选择是否盖章!",groups = {AddGroup.class, UpdateGroup.class})
     private Integer affixSealStatus;
 
     /**
      * 审核状态 0 未审核 1 审核通过 -1 审核不通过
      */
-    @NotNull(message = "审核状态不能为空!",groups = {AddGroup.class, UpdateGroup.class})
+    //@NotNull(message = "审核状态不能为空!",groups = {AddGroup.class, UpdateGroup.class})
     private Integer auditStatus;
 
     /**
      * 是否作废 1 作废 0 在用
      */
-    @NotNull(message = "请选择是否作废!",groups = {AddGroup.class, UpdateGroup.class})
+    //@NotNull(message = "请选择是否作废!",groups = {AddGroup.class, UpdateGroup.class})
     private Integer nullifyStatus;
 
     /**

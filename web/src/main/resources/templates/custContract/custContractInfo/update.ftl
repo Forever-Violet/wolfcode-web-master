@@ -33,8 +33,7 @@
                     </div>
                 </div>-->
 
-                <script type="text/html">
-                <#if obj.auditStatus==-1 && obj.nullifyStatus == 0>
+                <#if obj.auditStatus==-1> <#--审核不通过 可以修改-->
                 <div class="layui-col-lg6">
                         <label>企业名称</label>
                 </div>
@@ -121,25 +120,22 @@
                 </div>
                 </#if>
 
-<#--
 
-                <div class="layui-col-lg6">
+<#--                <div class="layui-col-lg6">
                         <label>是否盖章确认</label>
                 </div>
                 <div class="layui-input-line">
-                    <select name="affixSealStatus" id="affixSealStatus" lay-filter="affixSealStatus">
+                    <select name="affixSealStatus" id="affixSealStatus">
                         <option <#if obj.affixSealStatus==0>selected</#if> value="0">否</option>
                         <option <#if obj.affixSealStatus==1>selected</#if> value="1">是</option>
                     </select>
                 </div>
-
 
                 <div class="layui-col-lg6">
                         <label>审核状态</label>
                 </div>
                 <div class="layui-input-line">
                     <select name="auditStatus">
-                        <option <#if obj.auditStatus==0>selected</#if> value="0">未审核</option>
                         <option <#if obj.auditStatus==1>selected</#if> value="1">审核通过</option>
                         <option <#if obj.auditStatus==-1>selected</#if> value="-1">审核不通过</option>
                     </select>
@@ -154,17 +150,16 @@
                         <option <#if obj.nullifyStatus==0>selected</#if> value="0">否</option>
                         <option <#if obj.nullifyStatus==1>selected</#if> value="1">是</option>
                     </select>
-                </div>
--->
+                </div>-->
+
 
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="Add-filter">修改</button>
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="Add-filter">确认</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
-                </script>
             </div>
         </form>
     </div>
