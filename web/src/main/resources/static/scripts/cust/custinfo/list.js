@@ -104,6 +104,31 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                 content: web.rootPath() + 'custinfo/add.html'
             });
         }
+
+        if(obj.event == 'export'){
+
+            var parameterName = $("#searchForm").find("input[name='parameterName']").val().trim();
+            var province = $("#searchForm").find("select[name='province']").val().trim();
+            var openStatus = $("#searchForm").find("select[name='openStatus']").val().trim();
+
+            var eix;
+            $.fileDownload(web.rootPath() + "custinfo/export?parameterName="+ parameterName +"&province="+ province +"&openStatus="+ openStatus, {
+                //+"&province="+province
+                httpMethod: 'POST',
+                // data: buildCondition(),
+                prepareCallback: function (url) {
+                    eix = layer.load(2);
+                },
+                successCallback: function (url) {
+                    layer.close(eix)
+                },
+                failCallback: function (html, url) {
+                    layer.close(eix)
+                    layer.msg("导出失败", {icon: 2});
+                }
+            });
+
+        }
         ;
     });
     //监听工具条

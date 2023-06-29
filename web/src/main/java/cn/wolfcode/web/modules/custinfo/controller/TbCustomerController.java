@@ -1,8 +1,11 @@
 package cn.wolfcode.web.modules.custinfo.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.wolfcode.web.commons.entity.LayuiPage;
 import cn.wolfcode.web.commons.utils.CityUtils;
 import cn.wolfcode.web.commons.utils.LayuiTools;
+import cn.wolfcode.web.commons.utils.PoiExportHelper;
 import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.linkmanInfo.entity.TbCustLinkman;
@@ -33,6 +36,7 @@ import link.ahsj.core.entitys.ApiModel;
 import link.ahsj.core.exception.AppServerException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.StringUtil;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +51,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.management.Query;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -202,6 +207,34 @@ public class TbCustomerController extends BaseController {
         tbCustLinkmanService.lambdaUpdate().eq(TbCustLinkman::getCustId, id).remove();
 
         return ResponseEntity.ok(ApiModel.ok());
+    }
+
+    @RequestMapping("export")
+    @PreAuthorize("hasAuthority('cust:custinfo:export')")
+    public void export(HttpServletResponse response, String openStatus, String province, String parameterName) throws Exception {
+
+        //1.导出的内容
+        List<TbCustomer> list = entityService
+                .lambdaQuery()
+                .eq(StringUtils.isNotEmpty(openStatus), TbCustomer::getOpenStatus, openStatus)
+                .eq(StringUtils.isNotEmpty(province), TbCustomer::getProvince, province)
+                .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
+                .list();
+
+        //2.导出前的准备，设置表格标题属性样式
+        ExportParams exportParams = new ExportParams();
+
+        /**
+         * 参数1：表格标题属性
+         * 参数2：导出的类的字节码， 配合注解 @Excel(name = "xxx")
+         * 参数3：需要导出的数据
+         *
+         * 返回一个工作簿
+         */
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, TbCustomer.class, list);
+
+        //3.导出 --> IO流 输出流 字节
+        PoiExportHelper.exportExcel(response, "企业客户管理", workbook);
     }
 
 }

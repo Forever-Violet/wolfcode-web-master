@@ -1,5 +1,6 @@
 package cn.wolfcode.web.modules.custinfo.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import link.ahsj.core.annotations.AddGroup;
 import link.ahsj.core.annotations.UpdateGroup;
@@ -29,6 +30,7 @@ public class TbCustomer implements Serializable {
     /**
      * 企业名称
      */                    //数据效验
+    @Excel(name = "企业名称")
     @NotBlank(message = "请填写企业名称!", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 100, message = "企业名称不能超过100个字!", groups = {AddGroup.class, UpdateGroup.class})
     private String customerName;
@@ -36,6 +38,7 @@ public class TbCustomer implements Serializable {
     /**
      * 法定代表人
      */  //@NotBlank用于String
+    @Excel(name = "法定代表人")
     @NotBlank(message = "请填写法定代表人!", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 30, message = "法定代表人不能超过30个字捏!", groups = {AddGroup.class, UpdateGroup.class})
     private String legalLeader;
@@ -43,12 +46,14 @@ public class TbCustomer implements Serializable {
     /**
      * 成立时间
      */
+    @Excel(name = "成立日期")
     @NotNull(message = "请选择成立日期!", groups = {AddGroup.class, UpdateGroup.class})
     private LocalDate registerDate;
 
     /**
      * 经营状态, 0 开业、1 注销、2 破产
      */   // @NotNull用于Integer、Bigdecimal.LocalDateTime、LocalDate、实体类
+    @Excel(name = "经营状态", replace = {"开业_0", "注销_1", "破产_2"})
     @NotNull(message = "请选择经营状态!", groups = {AddGroup.class, UpdateGroup.class})
     private Integer openStatus; //默认开业
 
