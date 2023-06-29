@@ -20,7 +20,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
         id: "ListTable",
         cols: [[
             {type: "checkbox", fixed: "left", width: 50},
-                    {field: 'id', title:  'id', minWidth: 100, align: "center"},
+                    /*{field: 'id', title:  'id', minWidth: 100, align: "center"},*/
                     {field: 'custName', title: '企业名称', minWidth: 100, align: "center"},
                     {field: 'contractName', title: '合同名称', minWidth: 100, align: "center"},
                     {field: 'contractCode', title: '合同编码', minWidth: 100, align: "center"},
