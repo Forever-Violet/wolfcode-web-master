@@ -13,7 +13,15 @@
     <link rel="stylesheet" href="${request.contextPath}/layuiadmin/style/common.css" media="all">
 </head>
 <body>
+<style>
+    .layui-form-label {
+        width: 100px;
+    }
 
+    .layui-input-block {
+        margin-left: 100px;
+    }
+</style>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
@@ -45,15 +53,14 @@
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">起始日期</label>
+                                <label class="layui-form-label">拜访时间范围</label>
                                 <div class="layui-input-block input-box">
                                     <input class="layui-input" id="startDate" name="startDate" placeholder="请选择起始时间" />
                                 </div>
                             </div>
-
+                            <span style="margin-right: 5px">到</span>
                             <div class="layui-inline">
-                                <label class="layui-form-label">结束日期</label>
-                                <div class="layui-input-block input-box">
+                                <div class="">
                                     <input class="layui-input" id="endDate" name="endDate" placeholder="请选择结束时间" />
                                 </div>
                             </div>

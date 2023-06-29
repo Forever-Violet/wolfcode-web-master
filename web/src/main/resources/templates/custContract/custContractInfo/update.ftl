@@ -22,18 +22,7 @@
             <div class="layui-row layui-col-space10 layui-form-item">
 
 
-<#--                <div class="layui-col-lg6">
-                        <label>id</label>
-                    <div class="layui-input-block">
-                        <input type="text"
-                               name="id"
-                               value="${obj.id}"
-                               autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>-->
 
-                <#if obj.auditStatus==-1> <#--审核不通过 可以修改-->
                 <div class="layui-col-lg6">
                         <label>企业名称</label>
                 </div>
@@ -82,6 +71,24 @@
                            class="layui-input">
                 </div>
 
+<#--                <div class="layui-col-lg6">
+                    <label>合同时间范围</label>
+                </div>
+                <div class="layui-input-line">
+                    <div class="layui-input-inline">
+                        <input autocomplete="off"  id="startDate"
+                               name="startDate" class="layui-input"
+                               value="${obj.startDate}"
+                               placeholder="请选择合同生效开始时间">
+                    </div>
+                    <div class="layui-form-mid">到</div>
+                    <div class="layui-input-inline">
+                        <input autocomplete="off" id="endDate"
+                               name="endDate" class="layui-input"
+                               value="${obj.endDate}"
+                               placeholder="请选择合同生效结束时间">
+                    </div>
+                </div>-->
 
                 <div class="layui-col-lg6">
                         <label>合同开始时间</label>
@@ -103,7 +110,7 @@
                            id="endDate"
                            name="endDate"
                            value="${obj.endDate}"
-                           placeholder="请选择合同生效开始时间"/>
+                           placeholder="请选择合同生效结束时间"/>
 
                 </div>
 
@@ -118,7 +125,6 @@
                            autocomplete="off"
                            class="layui-input">
                 </div>
-                </#if>
 
 
 <#--                <div class="layui-col-lg6">
@@ -151,7 +157,6 @@
                         <option <#if obj.nullifyStatus==1>selected</#if> value="1">是</option>
                     </select>
                 </div>-->
-
 
 
                 <div class="layui-form-item">

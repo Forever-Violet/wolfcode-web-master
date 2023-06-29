@@ -37,6 +37,13 @@ layui.use(['form', 'layer', 'laydate'], function () {
         }
     });
 
+/*    laydate.render({
+        elem: '.date',
+        range: ['#startDate', '#endDate'],
+        type: 'date', //日期选择器的类型为 日期
+        trigger: 'click', //小屏幕一闪而过 可以加上这个
+    });*/
+
     // 监听盖章确认状态下拉框的选择变化事件
     form.on('select(affixSealStatus)', function (data) {
         // 获取选中的盖章确认状态
