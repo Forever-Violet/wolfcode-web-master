@@ -36,7 +36,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -102,10 +104,13 @@ public class TbOrderInfoController extends BaseController {
     public ResponseEntity page(LayuiPage layuiPage, String custId, String startDate, String endDate) {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
         IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
+        System.out.println(custId + "  " + startDate + "  " + endDate);
+
 
         page = entityService
                 .lambdaQuery()
                 .eq(!StringUtils.isEmpty(custId), TbOrderInfo::getCustId, custId) //企业id
+                //.between(!StringUtils.isEmpty(startDate)||!StringUtils.isEmpty(endDate), TbOrderInfo::getInputTime, startDate, endDate)
                 .ge(!StringUtils.isEmpty(startDate), TbOrderInfo::getInputTime, startDate) // 起始日期
                 .le(!StringUtils.isEmpty(endDate), TbOrderInfo::getInputTime, endDate) // 结束日期
                 .page(page);

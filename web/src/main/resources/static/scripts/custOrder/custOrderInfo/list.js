@@ -7,6 +7,36 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
         table = layui.table;
 
 
+    //起始日期  渲染
+    var start = laydate.render({
+        elem: '#startDate',
+        type: 'datetime',
+        fullPanel: true, // 2.8+ 全面版
+        done: function (value, date) { // 日期选择后的回调函数
+            endMax = end.config.max; // 存储结束日期的 最大日期
+            end.config.min = date; // 设置结束日期的 最小能选择的日期 为 起始日期
+            end.config.min.month = date.month - 1; // 设置 结束日期的 最小能选择的月份
+        }
+    });
+    //结束日期 渲染
+    var end = laydate.render({
+        elem: '#endDate',
+        type: 'datetime', // 日期加具体时间
+        fullPanel: true, // 2.8+ 全面版
+        done: function (value, date) { // 日期选择后的回调函数
+            if ($.trim(value) == '') { // 检查结束日期是否为空
+                var curDate = new Date(); // 将当日日期设置为默认日期
+                date = {
+                    'date': curDate.getDate(),
+                    'month': curDate.getMonth() + 1,
+                    'year': curDate.getFullYear()
+                };
+            }
+            start.config.max = date;  // 将起始日期的最大能设置的日期 设置为 结束日期
+            start.config.max.month = date.month - 1; // 设置起始日期的 最小能选择的 最大月份
+        }
+    });
+
     //用户列表
     var tableIns = table.render({
         elem: '#List',
@@ -84,7 +114,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                 where: { //设定异步数据接口的额外参数，任意设
                     custId: custId,
                     startDate: startDate,
-                    startDate: startDate,
+                    endDate: endDate,
                 }
             });
         }
