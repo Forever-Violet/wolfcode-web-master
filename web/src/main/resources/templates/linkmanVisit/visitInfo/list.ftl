@@ -81,6 +81,11 @@
                                         lay-event="add"><i class="layui-icon">&#xe654;</i>新增
                                 </button>
                             </@sec.authenticate>
+                            <@sec.authenticate grants="linkmanVisit:visitInfo:export">
+                                <button class="layui-btn layui-btn-sm layui-btn-primary" lay-tips="导出" lay-event="export">
+                                    <i class="layui-icon layui-icon-export"></i>导出
+                                </button>
+                            </@sec.authenticate>
                         </div>
                     </script>
 
@@ -104,6 +109,8 @@
 <script src="${request.contextPath}/layuiadmin/layui/layui.js"></script>
 <script src="${request.contextPath}/layui-extend.js"></script>
 <script src="${request.contextPath}/webjars/jquery/jquery.min.js"></script>
+
+<script src="${request.contextPath}/fileDownload/jquery.fileDownload.min.js"></script>
 <script type="text/javascript" src="${request.contextPath}/scripts/linkmanVisit/visitInfo/list.js?_=${randomNum}"></script>
 </body>
 </html>

@@ -118,18 +118,45 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
 
     //头工具栏事件
     table.on('toolbar(List-toolbar)', function (obj) {
-        switch (obj.event) {
-            case 'add':
-                layer.open({
-                    id: "Save-frame",
-                    type: 2,
-                    area: ['600px', '501px'],
-                    title: '新增',
-                    fixed: false,
-                    maxmin: true,
-                    content: web.rootPath() + 'visitInfo/add.html'
+        if (obj.event == 'add') {
+            layer.open({
+                id: "Save-frame",
+                type: 2,
+                area: ['600px', '501px'],
+                title: '新增',
+                fixed: false,
+                maxmin: true,
+                content: web.rootPath() + 'custinfo/add.html'
+            });
+        }
+
+        if(obj.event == 'export'){
+
+                var visitReason = $("#searchForm").find("input[name='visitReason']").val().trim();
+                var visitType = $("#searchForm").find("select[name='visitType']").val().trim();
+                var startDate = $("#searchForm").find("input[name='startDate']").val().trim();
+                var endDate = $("#searchForm").find("input[name='endDate']").val().trim();
+
+                var eix;
+                $.fileDownload(web.rootPath() + "visitInfo/export?visitReason="+ visitReason +"&visitType="+ visitType
+                    +"&startDate="+ startDate+"&endDate="+ endDate, {
+                    httpMethod: 'POST',
+                    // data: buildCondition(),
+                    prepareCallback: function (url) {
+                        eix = layer.load(2);
+                    },
+                    successCallback: function (url) {
+                        layer.close(eix)
+                    },
+                    failCallback: function (html, url) {
+                        layer.close(eix)
+                        layer.msg("导出失败", {icon: 2});
+                    }
                 });
-                break;
+
+
+
+
         }
     });
     //监听工具条

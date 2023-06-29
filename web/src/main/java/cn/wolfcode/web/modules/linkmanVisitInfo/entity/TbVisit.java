@@ -1,5 +1,6 @@
 package cn.wolfcode.web.modules.linkmanVisitInfo.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import link.ahsj.core.annotations.AddGroup;
 import link.ahsj.core.annotations.UpdateGroup;
@@ -39,6 +40,7 @@ public class TbVisit implements Serializable {
     /**
      * 企业名称
      */
+    @Excel(name = "客户名称")
     @TableField(exist = false) //标识表中不存在该字段
     private String custName;
 
@@ -51,18 +53,21 @@ public class TbVisit implements Serializable {
     /**
      * 联系人名称
      */
+    @Excel(name = "联系人")
     @TableField(exist = false) //标识表中不存在该字段
     private String linkmanName;
 
     /**
      * 拜访方式, 1 上门走访, 2 电话拜访
      */
+    @Excel(name = "拜访方式", replace = {"上门走访_1", "电话拜访_2"})
     @NotNull(message = "拜访方式不能为空!", groups = {AddGroup.class, UpdateGroup.class})
     private Integer visitType;
 
     /**
      * 拜访原因
      */
+    @Excel(name = "拜访原因")
     @NotBlank(message = "拜访原因不能为空!", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 100, message = "拜访原因不能超过100字", groups = {AddGroup.class, UpdateGroup.class})
     private String visitReason;
@@ -77,6 +82,7 @@ public class TbVisit implements Serializable {
     /**
      * 拜访时间
      */   //过去或今日
+    @Excel(name = "拜访时间")
     @PastOrPresent(message = "日期不能超过今日!", groups = {AddGroup.class, UpdateGroup.class}) //校验日期是否在当前时间之前, 即日期不能超过当前日期
     private LocalDate visitDate;
 

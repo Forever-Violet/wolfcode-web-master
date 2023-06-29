@@ -1,7 +1,10 @@
 package cn.wolfcode.web.modules.linkmanVisitInfo.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.wolfcode.web.commons.entity.LayuiPage;
 import cn.wolfcode.web.commons.utils.LayuiTools;
+import cn.wolfcode.web.commons.utils.PoiExportHelper;
 import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
@@ -28,6 +31,7 @@ import link.ahsj.core.annotations.UpdateGroup;
 import link.ahsj.core.entitys.ApiModel;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +42,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -189,6 +194,60 @@ public class TbVisitController extends BaseController {
     public ResponseEntity<ApiModel> delete(@PathVariable("id") String id) {
         entityService.removeById(id);
         return ResponseEntity.ok(ApiModel.ok());
+    }
+
+    @RequestMapping("export")
+    @PreAuthorize("hasAuthority('linkmanVisit:visitInfo:export')")
+    public void export(HttpServletResponse response, String startDate, String endDate,Integer visitType, String visitReason) throws Exception {
+
+        System.out.println("后端");
+        //1.导出的内容
+        List<TbVisit> list = entityService
+                .lambdaQuery()
+                .eq(!ObjectUtils.isEmpty(visitType), TbVisit::getVisitType, visitType) //拜访方式
+                .like(!StringUtils.isEmpty(visitReason), TbVisit::getVisitReason, visitReason) //拜访原因 模糊查询
+                .ge(!StringUtils.isEmpty(startDate), TbVisit::getVisitDate, startDate) // 起始日期
+                .le(!StringUtils.isEmpty(endDate), TbVisit::getVisitDate, endDate) // 结束日期
+                .list();
+
+        for (TbVisit record : list) {
+
+            // 根据联系人id获取联系人
+            TbCustLinkman tbCustLinkman = tbCustLinkmanService.getById(record.getLinkmanId());
+            if (tbCustLinkman != null) {
+                String inputUserName = tbCustLinkman.getLinkman();
+                // 设置联系人姓名
+                record.setLinkmanName(inputUserName);
+            } else { //此种情况是联系人的记录被删除, 将曾经保留的联系人id作为联系人姓名
+                record.setLinkmanName(record.getLinkmanId());
+            }
+
+            // 根据企业客户的id获取企业客户
+            TbCustomer tbCustomer = tbCustomerService.getById(record.getCustId());
+            if (tbCustomer != null) {
+                String custName = tbCustomer.getCustomerName();
+                // 设置企业名称
+                record.setCustName(custName);
+            } else { //此种情况是企业用户的记录被删除, 将曾经保留的企业用户id作为企业名称
+                record.setCustName(record.getCustId());
+            }
+        }
+
+
+        //2.导出前的准备，设置表格标题属性样式
+        ExportParams exportParams = new ExportParams();
+
+        /**
+         * 参数1：表格标题属性
+         * 参数2：导出的类的字节码， 配合注解 @Excel(name = "xxx")
+         * 参数3：需要导出的数据
+         *
+         * 返回一个工作簿
+         */
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, TbVisit.class, list);
+
+        //3.导出 --> IO流 输出流 字节
+        PoiExportHelper.exportExcel(response, "联系人走访管理", workbook);
     }
 
 }
