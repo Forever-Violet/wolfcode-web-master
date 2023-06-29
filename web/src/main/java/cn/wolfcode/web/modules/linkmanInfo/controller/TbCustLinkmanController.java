@@ -110,12 +110,10 @@ public class TbCustLinkmanController extends BaseController {
      * @param parameterName 联系人名称 或 电话
      * @param custId 所属企业id
      */
-    @SysLog(value = LogModules.DELETE, module = LogModule)
+    @SysLog(value = LogModules.EXPORT, module = LogModule)
     @RequestMapping("export")
     @PreAuthorize("hasAuthority('user:export')")
     public void export(HttpServletResponse response, String parameterName, String custId) {
-        System.out.println("导出的参数1" + parameterName);
-        System.out.println("导出的参数1" + custId);
 
         //要把什么数据导出到表格当中
         List<TbCustLinkman> list = entityService.lambdaQuery().

@@ -21,11 +21,22 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
         cols: [[
             {type: "checkbox", fixed: "left", width: 50},
                     {field: 'id', title:  'id', minWidth: 100, align: "center"},
-                    {field: 'custId', title: '所属客户id', minWidth: 100, align: "center"},
+                    {field: 'custName', title: '所属企业', minWidth: 100, align: "center"},
                     {field: 'prodName', title: '产品名称', minWidth: 100, align: "center"},
                     {field: 'amounts', title: '产品数量', minWidth: 100, align: "center"},
                     {field: 'price', title: '产品价格', minWidth: 100, align: "center"},
-                    {field: 'status', title: '状态 0 未发货 1 已发货 2 已收货', minWidth: 100, align: "center"},
+                    {
+                        field: 'status', title: '状态', minWidth: 110, align: "center"
+                        , templet: function (data) {
+                            if (data.status == '0') {
+                                return "<button class=\"layui-btn layui-btn-normal layui-btn-xs\" style='background-color: #33d3d8; width: 80px'>未发货</button>";
+                            } else if (data.status == '1') {
+                                return "<button class=\"layui-btn layui-btn-normal layui-btn-xs\" style='background-color: #387ef3; width: 80px'>已发货</button>";
+                            } else {
+                                return "<button class=\"layui-btn layui-btn-normal layui-btn-xs\" style='background-color: #96de59; width: 80px'>已收货</button>";
+                            }
+                        }
+                    },
                     {field: 'receiver', title: '收货人', minWidth: 100, align: "center"},
                     {field: 'linkPhone', title: '收货人电话', minWidth: 100, align: "center"},
                     {field: 'address', title: '收货地址', minWidth: 100, align: "center"},
@@ -36,7 +47,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                     {field: 'inputUser', title: '录入人', minWidth: 100, align: "center"},
                     {field: 'inputTime', title: '录入时间', minWidth: 100, align: "center"},
 
-            {title: '操作', width: 160, templet: '#List-editBar', fixed: "right", align: "center"}
+            {title: '操作', width: 230, templet: '#List-editBar', fixed: "right", align: "center"}
         ]],
 
     });
@@ -141,7 +152,57 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                 }, function () {
                 });
                 break;
-        };
+            case 'deliver':
+                var index = layer.confirm('确定已发货?', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    $.ajax({
+                        url: web.rootPath() + "custOrderInfo/deliver/" + data.id,
+                        type: "get",
+                        contentType: "application/json;charset=utf-8",
+                        data: JSON.stringify(data.field),
+                        dataType: 'json',
+                        success: function (data) {
+                            layer.msg("操作成功", {
+                                icon: 1,
+                                success: function () {
+                                    $('#SearchBtn').trigger("click");
+                                }
+                            });
+                        },
+                        error: function (e) {
+                            layer.msg(e.responseJSON.message, {icon: 2});
+                        }
+                    })
+                }, function () {
+                });
+                break;
+            case 'receive':
+                var index = layer.confirm('确定已收货?', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    $.ajax({
+                        url: web.rootPath() + "custOrderInfo/receive/" + data.id,
+                        type: "get",
+                        contentType: "application/json;charset=utf-8",
+                        data: JSON.stringify(data.field),
+                        dataType: 'json',
+                        success: function (data) {
+                            layer.msg("操作成功", {
+                                icon: 1,
+                                success: function () {
+                                    $('#SearchBtn').trigger("click");
+                                }
+                            });
+                        },
+                        error: function (e) {
+                            layer.msg(e.responseJSON.message, {icon: 2});
+                        }
+                    })
+                }, function () {
+                });
+                break;
+        }
     });
 
     $(window).resize(function () {

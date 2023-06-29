@@ -27,6 +27,10 @@ public interface LogModules {
 
     String RECOVER = "恢复";
 
+    String DELIVER = "发货";
+
+    String RECEIVE = "确认收货";
+
     String EXPORT = "导出";
 
     String IMPORT = "导入";

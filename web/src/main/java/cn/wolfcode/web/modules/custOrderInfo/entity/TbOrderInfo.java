@@ -1,5 +1,6 @@
 package cn.wolfcode.web.modules.custOrderInfo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,12 @@ public class TbOrderInfo implements Serializable {
     private String custId;
 
     /**
+     * 所属企业名称
+     */
+    @TableField(exist = false) // 标识表中不存在该字段
+    private String custName;
+
+    /**
      * 产品名称
      */
     private String prodName;
@@ -38,7 +45,7 @@ public class TbOrderInfo implements Serializable {
     /**
      * 产品价格
      */
-    private Integer price;
+    private String price;
 
     /**
      * 状态 0 未发货 1 已发货 2 已收货

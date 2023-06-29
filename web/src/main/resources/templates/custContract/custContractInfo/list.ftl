@@ -104,7 +104,7 @@
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
                                         class="layui-icon">&#xe640;</i>删除</a>
                         </@sec.authenticate>
-                        {{#  } else if(d.nullifyStatus != '1') { }}  <#-- 未作废 -->
+                        {{#  } else { }}  <#-- 未作废 -->
                         <@sec.authenticate grants="custContract:custContractInfo:delete">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
                                         class="layui-icon">&#xe640;</i>删除</a>

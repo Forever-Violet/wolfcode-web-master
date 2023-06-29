@@ -22,7 +22,8 @@
         margin-left: 100px;
     }
 </style>
-<div class="layui-fluid">
+
+<div class="layui-fluid" >
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
@@ -66,13 +67,6 @@
                                 </div>
                             </div>
 
-<#--                            <div class="layui-inline">
-                                <div class="layui-input-block input-box">
-
-                                    <input class="layui-input" id="endDate" name="endDate" placeholder="请选择结束时间" />
-                                </div>
-                            </div>-->
-
                             <div class="layui-inline">
                                 <button type="button" class="layui-btn layui-btn-normal" id="SearchBtn"
                                         data-type="reload">搜索
@@ -99,7 +93,13 @@
                         </div>
                     </script>
 
+
                     <script type="text/html" id="List-editBar">
+                        {{#  if(d.status == '0'){ }} <#--未发货可以修改-->
+                        <@sec.authenticate grants="custOrder:custOrderInfo:deliver"> <#--记得在菜单表中加入对应按钮, 把权限录入-->
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="deliver"><i
+                                        class="layui-icon">&#xe609;</i>发货</a>
+                        </@sec.authenticate>
                         <@sec.authenticate grants="custOrder:custOrderInfo:update">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="update"><i
                                         class="layui-icon">&#xe642;</i>修改</a>
@@ -108,6 +108,21 @@
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
                                         class="layui-icon">&#xe640;</i>删除</a>
                         </@sec.authenticate>
+                        {{# }else if(d.status == '1'){ }}  <#--已发货可以确认收货-->
+                        <@sec.authenticate grants="custOrder:custOrderInfo:receive">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="receive"><i
+                                        class="layui-icon">&#xe605;</i>确认收货</a>
+                        </@sec.authenticate>
+                        <@sec.authenticate grants="custOrder:custOrderInfo:delete">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
+                                        class="layui-icon">&#xe640;</i>删除</a>
+                        </@sec.authenticate>
+                        {{# }else{ }}
+                        <@sec.authenticate grants="custOrder:custOrderInfo:delete">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
+                                        class="layui-icon">&#xe640;</i>删除</a>
+                        </@sec.authenticate>
+                        {{# } }}
                     </script>
                 </div>
                 <!-- 数据表格end -->

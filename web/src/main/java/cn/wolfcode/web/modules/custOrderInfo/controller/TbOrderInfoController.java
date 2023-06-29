@@ -6,6 +6,8 @@ import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
 import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
+import cn.wolfcode.web.modules.linkmanInfo.entity.TbCustLinkman;
+import cn.wolfcode.web.modules.linkmanVisitInfo.entity.TbVisit;
 import cn.wolfcode.web.modules.log.LogModules;
 import cn.wolfcode.web.modules.sys.entity.SysUser;
 import cn.wolfcode.web.modules.sys.form.LoginForm;
@@ -22,6 +24,7 @@ import link.ahsj.core.annotations.SameUrlData;
 import link.ahsj.core.annotations.SysLog;
 import link.ahsj.core.annotations.UpdateGroup;
 import link.ahsj.core.entitys.ApiModel;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -56,6 +60,10 @@ public class TbOrderInfoController extends BaseController {
 
     @GetMapping("/list.html")
     public ModelAndView list(ModelAndView mv) {
+        // 获取企业用户列表
+        List<TbCustomer> custList = tbCustomerService.list();
+        // 共享至请求域
+        mv.addObject("custList", custList);
 
         mv.setViewName("custOrder/custOrderInfo/list");
         return mv;
@@ -91,10 +99,40 @@ public class TbOrderInfoController extends BaseController {
 
     @RequestMapping("list")
     @PreAuthorize("hasAuthority('custOrder:custOrderInfo:list')")
-    public ResponseEntity page(LayuiPage layuiPage) {
+    public ResponseEntity page(LayuiPage layuiPage, String custId, String startDate, String endDate) {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
         IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
-        return ResponseEntity.ok(LayuiTools.toLayuiTableModel(entityService.page(page)));
+
+        page = entityService
+                .lambdaQuery()
+                .eq(!StringUtils.isEmpty(custId), TbOrderInfo::getCustId, custId) //企业id
+                .ge(!StringUtils.isEmpty(startDate), TbOrderInfo::getInputTime, startDate) // 起始日期
+                .le(!StringUtils.isEmpty(endDate), TbOrderInfo::getInputTime, endDate) // 结束日期
+                .page(page);
+
+        // 获取所有订货单记录
+        List<TbOrderInfo> orderList = page.getRecords();
+        // 获取订货单记录列表, 查询并填充企业的名称
+        orderList.forEach(item ->{
+            String id = item.getCustId(); //拿到客户id
+            //根据客户id查询客户对象
+            TbCustomer tbCustomer = tbCustomerService.getById(id);
+            if (tbCustomer != null){
+                // 设置企业客户的名称
+                item.setCustName(tbCustomer.getCustomerName());
+            } else { // 若企业客户的记录被删除, 则将订货单记录中保存的企业客户的id作为企业名称
+                item.setCustName(id);
+            }
+
+            // 格式化产品单价, 显示两位小数
+            String price = item.getPrice();
+            BigDecimal priceValue = new BigDecimal(price);
+            item.setPrice(String.format("%.2f", priceValue));
+
+        });
+
+
+        return ResponseEntity.ok(LayuiTools.toLayuiTableModel(page));
     }
 
     @SameUrlData
@@ -116,6 +154,46 @@ public class TbOrderInfoController extends BaseController {
 
 
         entityService.save(entity);
+        return ResponseEntity.ok(ApiModel.ok());
+    }
+
+    /**
+     * 发货
+     * @param id 订货单id
+     * @return
+     */
+    @SysLog(value = LogModules.DELIVER, module = LogModule)
+    @RequestMapping("deliver/{id}")
+    @PreAuthorize("hasAuthority('custOrder:custOrderInfo:deliver')")
+    public ResponseEntity<ApiModel> deliver(@PathVariable("id") String id) {
+        // 根据id获取订单
+        TbOrderInfo order = entityService.getById(id);
+        // 设置发货时间
+        order.setDeliverTime(LocalDateTime.now());
+        // 将状态更改为已发货
+        order.setStatus(1);
+        // 更新
+        entityService.updateById(order);
+        return ResponseEntity.ok(ApiModel.ok());
+    }
+
+    /**
+     * 确认收货
+     * @param id 订货单id
+     * @return
+     */            // logModules里面去自定义常量
+    @SysLog(value = LogModules.RECEIVE, module = LogModule)
+    @RequestMapping("receive/{id}")
+    @PreAuthorize("hasAuthority('custOrder:custOrderInfo:receive')")
+    public ResponseEntity<ApiModel> receive(@PathVariable("id") String id) {
+        // 根据id获取订单
+        TbOrderInfo order = entityService.getById(id);
+        // 设置收货时间
+        order.setReceiveTime(LocalDateTime.now());
+        // 将状态更改为已收货
+        order.setStatus(2);
+        // 更新
+        entityService.updateById(order);
         return ResponseEntity.ok(ApiModel.ok());
     }
 
