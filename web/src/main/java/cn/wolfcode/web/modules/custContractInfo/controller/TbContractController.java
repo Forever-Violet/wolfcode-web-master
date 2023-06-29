@@ -1,12 +1,16 @@
 package cn.wolfcode.web.modules.custContractInfo.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.wolfcode.web.commons.entity.LayuiPage;
 import cn.wolfcode.web.commons.utils.LayuiTools;
+import cn.wolfcode.web.commons.utils.PoiExportHelper;
 import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custOrderInfo.entity.TbOrderInfo;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
 import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
+import cn.wolfcode.web.modules.linkmanInfo.entity.TbCustLinkman;
 import cn.wolfcode.web.modules.log.LogModules;
 import cn.wolfcode.web.modules.sys.entity.SysUser;
 import cn.wolfcode.web.modules.sys.form.LoginForm;
@@ -26,6 +30,7 @@ import link.ahsj.core.annotations.UpdateGroup;
 import link.ahsj.core.entitys.ApiModel;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +41,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -165,6 +172,62 @@ public class TbContractController extends BaseController {
         entityService.updateById(entity);
         return ResponseEntity.ok(ApiModel.ok());
     }
+
+    /**
+     * 导出
+     */
+    @SysLog(value = LogModules.EXPORT, module = LogModule)
+    @RequestMapping("export")
+    @PreAuthorize("hasAuthority('custContract:custContractInfo:export')")
+    public void export(HttpServletResponse response, String contractInfo, Integer auditStatus
+            , Integer affixSealStatus, Integer nullifyStatus) {
+
+        //要把什么数据导出到表格当中
+        List<TbContract> list = entityService
+                .lambdaQuery()
+                .eq(ObjectUtils.isNotEmpty(auditStatus), TbContract::getAuditStatus, auditStatus) // 审核状态
+                .eq(ObjectUtils.isNotEmpty(affixSealStatus), TbContract::getAffixSealStatus, affixSealStatus) // 是否盖章
+                .eq(ObjectUtils.isNotEmpty(nullifyStatus), TbContract::getNullifyStatus, nullifyStatus) // 是否作废
+                .like(StringUtils.isNotEmpty(contractInfo), TbContract::getContractName, contractInfo) // 合同名称模糊查询
+                .or()
+                .like(StringUtils.isNotEmpty(contractInfo), TbContract::getContractCode, contractInfo) // 合同编码模糊查询
+                .list();
+
+        // 为所有联系人记录设置企业名称
+        list.forEach(item->{
+            String id = item.getCustId(); //拿到客户id
+            //根据客户id查询客户对象
+            TbCustomer tbCustomer = tbCustomerService.getById(id);
+            if (tbCustomer != null){
+                // 设置企业客户的名称
+                item.setCustName(tbCustomer.getCustomerName());
+            } else { // 若企业客户的记录被删除, 则将合同记录中保存的企业客户的id作为企业名称
+                item.setCustName(id);
+            }
+
+            // 格式化合同金额, 显示两位小数
+            String amounts = item.getAmounts();
+            BigDecimal amountsValue = new BigDecimal(amounts);
+            item.setAmounts(String.format("%.2f", amountsValue));
+        });
+
+        //执行文件导出 准备工作
+        ExportParams exportParams = new ExportParams();
+        /**
+         * 参数一： 样式
+         * 参数二：导出的实体类的字节码  实际上来解析我们的导出的注释列的
+         * 参数三：导出的内容
+         */
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, TbContract.class, list);
+        //导出
+        try {
+            PoiExportHelper.exportExcel(response, "客户合同管理", workbook);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     /**
      * 审核

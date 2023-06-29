@@ -221,6 +221,13 @@ public class TbCustomerController extends BaseController {
                 .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
                 .list();
 
+        for (TbCustomer record : list) {
+            // 根据省份编号获取省份名称
+            String cityValue = CityUtils.getCityValue(record.getProvince());
+            // 设置当前记录的省份名称
+            record.setProvinceName(cityValue);
+        }
+
         //2.导出前的准备，设置表格标题属性样式
         ExportParams exportParams = new ExportParams();
 

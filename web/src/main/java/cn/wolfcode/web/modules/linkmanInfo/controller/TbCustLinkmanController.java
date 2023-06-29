@@ -112,7 +112,7 @@ public class TbCustLinkmanController extends BaseController {
      */
     @SysLog(value = LogModules.EXPORT, module = LogModule)
     @RequestMapping("export")
-    @PreAuthorize("hasAuthority('user:export')")
+    @PreAuthorize("hasAuthority('custLinkman:linkmanInfo:export')")
     public void export(HttpServletResponse response, String parameterName, String custId) {
 
         //要把什么数据导出到表格当中

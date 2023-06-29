@@ -67,6 +67,7 @@ public class TbCustomer implements Serializable {
      * 所属地区省份的名字
      */
     @TableField(exist = false)
+    @Excel(name = "所属地区省份")
     private String provinceName;
 
     /**
@@ -74,6 +75,7 @@ public class TbCustomer implements Serializable {
      */
     @NotBlank(message = "请填写注册资本!", groups = {AddGroup.class, UpdateGroup.class})
     @Length(message = "注册资本不能超过20个字", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "注册资本")
     private String regCapital;
 
     /**
@@ -81,18 +83,21 @@ public class TbCustomer implements Serializable {
      */
     @NotBlank(message = "请填写所属行业!", groups = {AddGroup.class, UpdateGroup.class})
     @Length(message = "所属行业不能超过30个字", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "所属行业")
     private String industry;
 
     /**
      * 经营范围
      */
     @Length(message = "经营范围不能超过500个字", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "经营范围")
     private String scope;
 
     /**
      * 注册地址
      */
     @Length(message = "注册地址不能超过500个字", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "注册地址")
     private String regAddr;
 
     /**
