@@ -124,18 +124,43 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
 
     //头工具栏事件
     table.on('toolbar(List-toolbar)', function (obj) {
-        if (obj.event == 'add') {
-            layer.open({
-                id: "Save-frame",
-                type: 2,
-                area: ['600px', '501px'],
-                title: '新增',
-                fixed: false,
-                maxmin: true,
-                content: web.rootPath() + 'custContractInfo/add.html'
-            });
+        switch (obj.event) {
+            case 'add':
+                layer.open({
+                    id: "Save-frame",
+                    type: 2,
+                    area: ['600px', '501px'],
+                    title: '新增',
+                    fixed: false,
+                    maxmin: true,
+                    content: web.rootPath() + 'custContractInfo/add.html'
+                });
+                break;
+            case 'export':
+                var eix;
+                //获取搜索条件值
+                var contractInfo = $("#searchForm").find("input[name='contractInfo']").val().trim();
+                var auditStatus = $("#searchForm").find("select[name='auditStatus']").val().trim();
+                var affixSealStatus = $("#searchForm").find("select[name='affixSealStatus']").val().trim();
+                var nullifyStatus = $("#searchForm").find("select[name='nullifyStatus']").val().trim();
+
+                var url = web.rootPath() + 'custContractInfo/export?contractInfo=' + contractInfo + '&auditStatus='
+                    + auditStatus + '&affixSealStatus=' + affixSealStatus + '&nullifyStatus=' + nullifyStatus;
+                $.fileDownload(url, {
+                    httpMethod: 'POST',
+                    prepareCallback: function (url) {
+                        eix = layer.load(2);
+                    },
+                    successCallback: function (url) {
+                        layer.close(eix)
+                    },
+                    failCallback: function (html, url) {
+                        layer.close(eix)
+                        layer.msg("导出失败", {icon: 2});
+                    }
+                });
+                break;
         }
-        ;
     });
     //监听工具条
     table.on('tool(List-toolbar)', function (obj) {

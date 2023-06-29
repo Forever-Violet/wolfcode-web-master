@@ -203,6 +203,11 @@ public class TbOrderInfoController extends BaseController {
             // 设置企业名称
             String custName = tbCustomerService.getById(item.getCustId()).getCustomerName();
             item.setCustName(custName);
+
+            // 格式化合产品价格, 显示两位小数
+            String price = item.getPrice();
+            BigDecimal priceValue = new BigDecimal(price);
+            item.setPrice(String.format("%.2f", priceValue));
         });
 
         //执行文件导出 准备工作

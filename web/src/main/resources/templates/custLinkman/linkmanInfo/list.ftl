@@ -70,7 +70,7 @@
                                 </button>
                             </@sec.authenticate>
 
-                            <@sec.authenticate grants="user:export">
+                            <@sec.authenticate grants="custLinkman:linkmanInfo:export">
                             <button class="layui-btn layui-btn-sm layui-btn-primary" lay-tips="导出" lay-event="export">
                                 <i class="layui-icon layui-icon-export"></i>导出
                             </button>

@@ -72,6 +72,7 @@ public class TbOrderInfo implements Serializable {
     /**
      * 状态 0 未发货 1 已发货 2 已收货
      */
+    @Excel(name = "状态", replace = {"未发货_0", "已发货_1", "已收货_2"})
     private Integer status;
 
     /**
@@ -79,6 +80,7 @@ public class TbOrderInfo implements Serializable {
      */
     @Length(max = 30, message = "收货人不能超过30个字！", groups = {AddGroup.class, UpdateGroup.class})
     @NotBlank(message = "收货人不能为空！", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "收货人")
     private String receiver;
 
     /**
@@ -87,6 +89,7 @@ public class TbOrderInfo implements Serializable {
     @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "收货人电话必须为纯数字!", groups = {AddGroup.class, UpdateGroup.class})
     @NotBlank(message = "收货人电话不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 20, message = "收货人电话不能超过20个字！", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "收货人电话")
     private String linkPhone;
 
     /**
@@ -94,6 +97,7 @@ public class TbOrderInfo implements Serializable {
      */
     @NotBlank(message = "收货地址不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 50, message = "收货地址不能超过50个字！", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "收货人地址")
     private String address;
 
     /**
@@ -101,6 +105,7 @@ public class TbOrderInfo implements Serializable {
      */
     @NotBlank(message = "物流不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 20, message = "物流不能超过20个字！", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "物流")
     private String logistcs;
 
     /**
@@ -108,18 +113,21 @@ public class TbOrderInfo implements Serializable {
      */
     @NotBlank(message = "物流单号不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 50, message = "物流单号不能超过50个字！", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "物流单号")
     private String logisticsCode;
 
     /**
      * 发货时间
      */
   //  @NotNull(message = "物流单号不能为空！", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "发货时间")
     private LocalDateTime deliverTime;
 
     /**
      * 收货时间
      */
   //  @NotNull(message = "物流单号不能为空！", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "收货时间")
     private LocalDateTime receiveTime;
 
     /**
