@@ -93,6 +93,11 @@
                         </div>
                     </script>
 
+                    <@sec.authenticate grants="custOrder:custOrderInfo:export">
+                        <button class="layui-btn layui-btn-sm layui-btn-primary" lay-tips="导出" lay-event="export">
+                            <i class="layui-icon layui-icon-export"></i>导出
+                        </button>
+                    </@sec.authenticate>
 
                     <script type="text/html" id="List-editBar">
                         {{#  if(d.status == '0'){ }} <#--未发货可以修改-->

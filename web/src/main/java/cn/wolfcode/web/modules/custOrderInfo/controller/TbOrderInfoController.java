@@ -1,7 +1,10 @@
 package cn.wolfcode.web.modules.custOrderInfo.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.wolfcode.web.commons.entity.LayuiPage;
 import cn.wolfcode.web.commons.utils.LayuiTools;
+import cn.wolfcode.web.commons.utils.PoiExportHelper;
 import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
@@ -25,6 +28,7 @@ import link.ahsj.core.annotations.SysLog;
 import link.ahsj.core.annotations.UpdateGroup;
 import link.ahsj.core.entitys.ApiModel;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +38,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -104,8 +110,6 @@ public class TbOrderInfoController extends BaseController {
     public ResponseEntity page(LayuiPage layuiPage, String custId, String startDate, String endDate) {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
         IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
-        System.out.println(custId + "  " + startDate + "  " + endDate);
-
 
         page = entityService
                 .lambdaQuery()
@@ -180,6 +184,42 @@ public class TbOrderInfoController extends BaseController {
         // 更新
         entityService.updateById(order);
         return ResponseEntity.ok(ApiModel.ok());
+    }
+
+    @SysLog(value = LogModules.EXPORT, module = LogModule)
+    @RequestMapping("export")
+    @PreAuthorize("hasAuthority('custOrder:custOrderInfo:export')")
+    public void export(HttpServletResponse response, String custId, String startDate, String endDate) {
+
+        //要把什么数据导出到表格当中
+        List<TbOrderInfo> list = entityService.lambdaQuery()
+                .eq(!StringUtils.isEmpty(custId), TbOrderInfo::getCustId, custId) //企业id
+                .ge(!StringUtils.isEmpty(startDate), TbOrderInfo::getInputTime, startDate) // 起始日期
+                .le(!StringUtils.isEmpty(endDate), TbOrderInfo::getInputTime, endDate) // 结束日期
+                .list();
+
+        // 为所有订单记录设置企业名称
+        list.forEach(item->{
+            // 设置企业名称
+            String custName = tbCustomerService.getById(item.getCustId()).getCustomerName();
+            item.setCustName(custName);
+        });
+
+        //执行文件导出 准备工作
+        ExportParams exportParams = new ExportParams();
+        /**
+         * 参数一： 样式
+         * 参数二：导出的实体类的字节码  实际上来解析我们的导出的注释列的
+         * 参数三：导出的内容
+         */
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, TbOrderInfo.class, list);
+        //导出
+        try {
+            PoiExportHelper.exportExcel(response, "客户订单管理", workbook);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

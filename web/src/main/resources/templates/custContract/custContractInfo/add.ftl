@@ -79,7 +79,7 @@
                     <input type="text"  name="content"  placeholder="请输入"  autocomplete="off" class="layui-input">
                 </div>
 
-                <div class="layui-col-lg6">
+<#--                <div class="layui-col-lg6">
                         <label>是否盖章确认</label>
                 </div>
                 <div class="layui-input-line">
@@ -111,25 +111,8 @@
                         <option value="0">否</option>
                         <option value="1">是</option>
                     </select>
-                </div>
-<#--                <div class="layui-col-lg6">
-                        <label class="layui-form-label">录入人</label>
-                    <div class="layui-input-block">
-                        <input type="text"  name="inputUser"  placeholder="请输入"  autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-col-lg6">
-                        <label class="layui-form-label">录入时间</label>
-                    <div class="layui-input-block">
-                        <input type="text"  name="inputTime"  placeholder="请输入"  autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-col-lg6">
-                        <label class="layui-form-label">修改时间</label>
-                    <div class="layui-input-block">
-                        <input type="text"  name="updateTime"  placeholder="请输入"  autocomplete="off" class="layui-input">
-                    </div>
                 </div>-->
+
 
             </div>
             <div class="layui-form-item">

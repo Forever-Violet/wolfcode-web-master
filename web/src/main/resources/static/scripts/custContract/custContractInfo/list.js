@@ -64,7 +64,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                     {field: 'inputTime', title: '录入时间', minWidth: 100, align: "center"},
                     {field: 'updateTime', title: '修改时间', minWidth: 100, align: "center"},
 
-            {title: '操作', width: 160, templet: '#List-editBar', fixed: "right", align: "center"}
+            {title: '操作', width: 220, templet: '#List-editBar', fixed: "right", align: "center"}
         ]],
 
     });
@@ -84,8 +84,17 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
             case 'export':
                 layer.msg("export");
                 break;
+            case 'audit':
+                layer.msg("audit");
+                break;
+            case 'affixSeal':
+                layer.msg("affixSeal");
+                break;
+            case 'nullify':
+                layer.msg("nullify");
+                break;
         }
-        ;
+
     });
 
     var $ = layui.$, active = {
@@ -131,6 +140,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
     //监听工具条
     table.on('tool(List-toolbar)', function (obj) {
         var data = obj.data;
+        console.log(obj.event);
         switch (obj.event) {
             case 'update':
                 layer.open({
@@ -167,6 +177,42 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                         }
                     })
                 }, function () {
+                });
+                break;
+            case 'audit':
+                layer.open({
+                    id: "Audit-frame",
+                    type: 2,
+                    resize: false,
+                    area: ['550px', '500px'],
+                    title: '审核',
+                    fixed: false,
+                    maxmin: true,
+                    content: web.rootPath() + "custContractInfo/audit.html"
+                });
+                break;
+            case 'affixSeal':
+                layer.open({
+                    id: "Update-frame",
+                    type: 2,
+                    resize: false,
+                    area: ['550px', '500px'],
+                    title: '盖章确认',
+                    fixed: false,
+                    maxmin: true,
+                    content: web.rootPath() + "custContractInfo/affixSeal.html"
+                });
+                break;
+            case 'nullify':
+                layer.open({
+                    id: "Update-frame",
+                    type: 2,
+                    resize: false,
+                    area: ['550px', '500px'],
+                    title: '作废确认',
+                    fixed: false,
+                    maxmin: true,
+                    content: web.rootPath() + "custContractInfo/nullify.html"
                 });
                 break;
         };

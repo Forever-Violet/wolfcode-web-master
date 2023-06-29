@@ -33,7 +33,8 @@
                     </div>
                 </div>-->
 
-
+                <script type="text/html">
+                <#if obj.auditStatus==-1 && obj.nullifyStatus == 0>
                 <div class="layui-col-lg6">
                         <label>企业名称</label>
                 </div>
@@ -99,11 +100,6 @@
                         <label>合同终止时间</label>
                 </div>
                 <div class="layui-input-line">
-<#--                    <input type="text"
-                           name="endDate"
-                           value="${obj.endDate}"
-                           autocomplete="off"
-                           class="layui-input">-->
                     <input class="layui-input"
                            id="endDate"
                            name="endDate"
@@ -123,7 +119,9 @@
                            autocomplete="off"
                            class="layui-input">
                 </div>
+                </#if>
 
+<#--
 
                 <div class="layui-col-lg6">
                         <label>是否盖章确认</label>
@@ -157,6 +155,7 @@
                         <option <#if obj.nullifyStatus==1>selected</#if> value="1">是</option>
                     </select>
                 </div>
+-->
 
 
                 <div class="layui-form-item">
@@ -165,6 +164,7 @@
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
+                </script>
             </div>
         </form>
     </div>

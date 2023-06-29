@@ -94,8 +94,27 @@
                     </script>
 
                     <script type="text/html" id="List-editBar">
-                        {{#  if(d.auditStatus == '0' && d.nullifyStatus == '0'){ <#--未审核 & 未作废-->
+                        {{#  if(d.nullifyStatus == '1'){ <#--若作废-->
                         }}
+                        <@sec.authenticate grants="custContract:custContractInfo:delete">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
+                                        class="layui-icon">&#xe640;</i>删除</a>
+                        </@sec.authenticate>
+                        {{# }else if(d.auditStatus == '0'){ <#--未审核 & 未作废-->
+                        }}
+                        <@sec.authenticate grants="custContract:custContractInfo:audit">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="audit"><i
+                                        class="layui-icon">&#xe642;</i>审核</a>
+                        </@sec.authenticate>
+                        <@sec.authenticate grants="custContract:custContractInfo:delete">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
+                                        class="layui-icon">&#xe640;</i>删除</a>
+                        </@sec.authenticate>
+                        <@sec.authenticate grants="custContract:custContractInfo:nullify">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="nullify"><i
+                                        class="layui-icon">&#xe640;</i>作废</a>
+                        </@sec.authenticate>
+                        {{#  } else if(d.auditStatus == '-1'){ }}  <#-- 审核不通过可以修改 未作废 -->
                         <@sec.authenticate grants="custContract:custContractInfo:update">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="update"><i
                                         class="layui-icon">&#xe642;</i>修改</a>
@@ -104,12 +123,26 @@
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
                                         class="layui-icon">&#xe640;</i>删除</a>
                         </@sec.authenticate>
-                        {{#  } else { }}  <#-- 未作废 -->
+                        <@sec.authenticate grants="custContract:custContractInfo:nullify">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="nullify"><i
+                                        class="layui-icon">&#xe640;</i>作废</a>
+                        </@sec.authenticate>
+                        {{#  } else if(d.auditStatus == '1'){ }} <#--审核通过 盖章确认  未作废-->
+                        <@sec.authenticate grants="custContract:custContractInfo:affixSeal">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="affixSeal"><i
+                                        class="layui-icon">&#xe640;</i>盖章</a>
+                        </@sec.authenticate>
                         <@sec.authenticate grants="custContract:custContractInfo:delete">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
                                         class="layui-icon">&#xe640;</i>删除</a>
                         </@sec.authenticate>
-                        {{#  } }}
+                        <@sec.authenticate grants="custContract:custContractInfo:nullify">
+                            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="nullify"><i
+                                        class="layui-icon">&#xe640;</i>作废</a>
+                        </@sec.authenticate>
+                        {{# }  }}
+
+
                     </script>
                 </div>
                 <!-- 数据表格end -->

@@ -1,5 +1,6 @@
 package cn.wolfcode.web.modules.custOrderInfo.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
@@ -30,21 +31,25 @@ public class TbOrderInfo implements Serializable {
      * 所属企业名称
      */
     @TableField(exist = false) // 标识表中不存在该字段
+    @Excel(name = "企业名称")
     private String custName;
 
     /**
      * 产品名称
      */
+    @Excel(name = "产品名称")
     private String prodName;
 
     /**
      * 产品数量
      */
+    @Excel(name = "产品数量")
     private Integer amounts;
 
     /**
      * 产品价格
      */
+    @Excel(name = "产品单价")
     private String price;
 
     /**
