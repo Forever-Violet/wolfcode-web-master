@@ -27,7 +27,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">合同信息</label>
                                 <div class="layui-input-block input-box">
-                                    <input type="text" name="contractInfo" placeholder="请输入"
+                                    <input type="text" name="contractInfo" placeholder="合同名称/编码"
                                            autocomplete="off"
                                            class="layui-input">
                                 </div>

@@ -30,6 +30,7 @@ import link.ahsj.core.entitys.ApiModel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -166,26 +167,6 @@ public class TbOrderInfoController extends BaseController {
         return ResponseEntity.ok(ApiModel.ok());
     }
 
-    /**
-     * 发货
-     * @param id 订货单id
-     * @return
-     */
-    @SysLog(value = LogModules.DELIVER, module = LogModule)
-    @RequestMapping("deliver/{id}")
-    @PreAuthorize("hasAuthority('custOrder:custOrderInfo:deliver')")
-    public ResponseEntity<ApiModel> deliver(@PathVariable("id") String id) {
-        // 根据id获取订单
-        TbOrderInfo order = entityService.getById(id);
-        // 设置发货时间
-        order.setDeliverTime(LocalDateTime.now());
-        // 将状态更改为已发货
-        order.setStatus(1);
-        // 更新
-        entityService.updateById(order);
-        return ResponseEntity.ok(ApiModel.ok());
-    }
-
     @SysLog(value = LogModules.EXPORT, module = LogModule)
     @RequestMapping("export")
     @PreAuthorize("hasAuthority('custOrder:custOrderInfo:export')")
@@ -226,6 +207,31 @@ public class TbOrderInfoController extends BaseController {
         }
 
     }
+
+    /**
+     * 发货
+     * @param id 订货单id
+     * @return
+     */
+    @SysLog(value = LogModules.DELIVER, module = LogModule)
+    @RequestMapping("deliver/{id}")
+    @PreAuthorize("hasAuthority('custOrder:custOrderInfo:deliver')")
+    public ResponseEntity<ApiModel> deliver(@PathVariable("id") String id) {
+        // 根据id获取订单
+        TbOrderInfo order = entityService.getById(id);
+        System.out.println(order.getLogistcs() + " " + order.getLogisticsCode());
+        if (StringUtils.isEmpty(order.getLogistcs()) || StringUtils.isEmpty(order.getLogisticsCode())) { //如果物流信息有缺少 不能发货
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiModel.error("请在修改操作中填写完整的物流信息!"));
+        }
+        // 设置发货时间
+        order.setDeliverTime(LocalDateTime.now());
+        // 将状态更改为已发货
+        order.setStatus(1);
+        // 更新
+        entityService.updateById(order);
+        return ResponseEntity.ok(ApiModel.ok());
+    }
+
 
     /**
      * 确认收货

@@ -29,16 +29,6 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                     {field: 'endDate', title: '合同终止时间', minWidth: 125, align: "center"},
                     {field: 'content', title: '合同内容', minWidth: 100, align: "center"},
                     {
-                        field: 'affixSealStatus', title: '是否盖章确认', minWidth: 100, align: "center"
-                        , templet: function (data) {
-                            if (data.affixSealStatus == '0') {
-                                return "<button class=\"layui-btn layui-btn-normal layui-btn-xs\" style='background-color: #387ef3'>否</button>";
-                            } else {
-                                return "<button class=\"layui-btn layui-btn-normal layui-btn-xs\" style='background-color: #91d756'>是</button>";
-                            }
-                        }
-                    },
-                    {
                         field: 'auditStatus', title: '审核状态', minWidth: 110, align: "center"
                         , templet: function (data) {
                             if (data.auditStatus == '0') {
@@ -47,6 +37,16 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                                 return "<button class=\"layui-btn layui-btn-normal layui-btn-xs\" style='background-color: #91d756; width: 80px'>审核通过</button>";
                             } else {
                                 return "<button class=\"layui-btn layui-btn-normal layui-btn-xs\" style='background-color: #ca5e50; width: 80px'>审核不通过</button>";
+                            }
+                        }
+                    },
+                    {
+                        field: 'affixSealStatus', title: '是否盖章确认', minWidth: 100, align: "center"
+                        , templet: function (data) {
+                            if (data.affixSealStatus == '0') {
+                                return "<button class=\"layui-btn layui-btn-normal layui-btn-xs\" style='background-color: #387ef3'>否</button>";
+                            } else {
+                                return "<button class=\"layui-btn layui-btn-normal layui-btn-xs\" style='background-color: #91d756'>是</button>";
                             }
                         }
                     },

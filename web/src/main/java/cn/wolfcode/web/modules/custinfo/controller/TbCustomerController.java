@@ -41,6 +41,7 @@ import org.apache.poi.util.StringUtil;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -71,6 +72,9 @@ public class TbCustomerController extends BaseController {
 
     @Autowired
     private ITbCustLinkmanService tbCustLinkmanService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     private static final String LogModule = "TbCustomer";

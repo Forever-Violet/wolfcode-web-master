@@ -88,7 +88,7 @@
                         <input type="text"  name="address"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-col-lg6">
+<#--                <div class="layui-col-lg6">
                         <label class="layui-form-label">物流</label>
                     <div class="layui-input-block">
                         <input type="text"  name="logistcs"  placeholder="请输入"  autocomplete="off" class="layui-input">
@@ -99,7 +99,7 @@
                     <div class="layui-input-block">
                         <input type="text"  name="logisticsCode"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
-                </div>
+                </div>-->
 <#--                <div class="layui-col-lg6">
                         <label class="layui-form-label">发货时间</label>
                     <div class="layui-input-block">

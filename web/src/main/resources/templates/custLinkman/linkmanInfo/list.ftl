@@ -28,7 +28,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">联系人</label>
                                 <div class="layui-input-block input-box">
-                                    <input type="text" name="parameterName" placeholder="请输入"
+                                    <input type="text" name="parameterName" placeholder="联系人姓名/电话"
                                            autocomplete="off"
                                            class="layui-input">
                                 </div>

@@ -121,7 +121,7 @@ spring:
     type: redis
     redis:
       key-prefix: '${spring.application.name}:AHSJ:CACHE:'
-      time-to-live: 600s
+      time-to-live: 1800s
     cache-names: ${spring.application.name}
 logging:
   level:

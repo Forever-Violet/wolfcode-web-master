@@ -103,7 +103,7 @@ public class TbOrderInfo implements Serializable {
     /**
      * 物流
      */
-    @NotBlank(message = "物流不能为空！", groups = {AddGroup.class, UpdateGroup.class})
+    //@NotBlank(message = "物流不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 20, message = "物流不能超过20个字！", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "物流")
     private String logistcs;
@@ -111,7 +111,7 @@ public class TbOrderInfo implements Serializable {
     /**
      * 物流单号
      */
-    @NotBlank(message = "物流单号不能为空！", groups = {AddGroup.class, UpdateGroup.class})
+    //@NotBlank(message = "物流单号不能为空！", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 50, message = "物流单号不能超过50个字！", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "物流单号")
     private String logisticsCode;
